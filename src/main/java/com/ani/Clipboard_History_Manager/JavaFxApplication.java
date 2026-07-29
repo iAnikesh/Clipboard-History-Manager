@@ -18,7 +18,7 @@ public class JavaFxApplication extends Application {
         ApplicationContextInitializer<GenericApplicationContext> initializer =
                 ac -> {
                     ac.registerBean(Application.class, () -> JavaFxApplication.this);
-                    ac.registerBean(Parameters.class, this::getParameters);
+                    ac.registerBean(Application.Parameters.class, this::getParameters);
                     ac.registerBean(HostServices.class, this::getHostServices);
                 };
         
