@@ -30,9 +30,11 @@ public class ClipboardWatcher {
                         String currentContent = (String) clipboard.getData(DataFlavor.stringFlavor);
                         if (currentContent != null && !currentContent.equals(lastContent)) {
                             lastContent = currentContent;
-                            ClipboardItem item = new ClipboardItem(currentContent, System.currentTimeMillis());
+                            ClipboardItem item = new ClipboardItem();
+                            item.setContent(currentContent);
+                            item.setTimestamp(System.currentTimeMillis());
                             queue.put(item);
-                            System.out.println("New clipboard item detected: " + item.content());
+                            System.out.println("New clipboard item detected: " + item.getContent());
                         }
                     }
                 } catch (Exception e) {
