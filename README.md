@@ -42,3 +42,43 @@ This application uses native Java AWT bindings for system clipboard and system t
 | **Windows** (10+) | ✅ Supported | Full support for tray icon and clipboard access. |
 | **Linux (X11)** | ✅ Supported | Requires `xclip` or `xsel` installed for optimal clipboard monitoring. |
 | **Linux (Wayland)** | ⚠️ Limited | **Known Wayland Limitation:** Wayland's strict security model actively prevents background applications from reading the global clipboard unless the application explicitly has focus. Java's AWT `SystemTray` API also lacks native Wayland support (often resulting in missing icons or falling back to a legacy XWayland window). Running the application under XWayland (`GDK_BACKEND=x11`) is required for functional clipboard tracking on Linux. |
+
+# Exporting the Application
+
+You can package this application into a native executable (like `.dmg` on Mac, `.exe` on Windows, or `.deb` on Linux) using the built-in JDK `jpackage` tool.
+
+1. **Build the Fat JAR:**
+   First, compile the application using Maven:
+   ```bash
+   ./mvnw clean package
+   ```
+   *This creates `target/Clipboard-History-Manager-0.0.1-SNAPSHOT.jar`.*
+
+2. **Run JPackage:**
+   Execute the following command based on your OS (you must run this on the target OS).
+
+   **macOS (.dmg):**
+   ```bash
+   jpackage --name "ClipboardManager" \
+     --input target/ \
+     --main-jar Clipboard-History-Manager-0.0.1-SNAPSHOT.jar \
+     --type dmg
+   ```
+
+   **Windows (.exe):**
+   ```powershell
+   jpackage --name "ClipboardManager" `
+     --input target/ `
+     --main-jar Clipboard-History-Manager-0.0.1-SNAPSHOT.jar `
+     --win-shortcut `
+     --type exe
+   ```
+
+   **Linux (.deb):**
+   ```bash
+   jpackage --name "clipboard-manager" \
+     --input target/ \
+     --main-jar Clipboard-History-Manager-0.0.1-SNAPSHOT.jar \
+     --linux-shortcut \
+     --type deb
+   ```
