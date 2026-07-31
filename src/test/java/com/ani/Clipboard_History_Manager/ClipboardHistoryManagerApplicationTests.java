@@ -10,6 +10,11 @@ class ClipboardHistoryManagerApplicationTests {
 	@BeforeAll
 	static void setup() {
 		System.setProperty("java.awt.headless", "false");
+		try {
+			javafx.application.Platform.startup(() -> {});
+		} catch (IllegalStateException e) {
+			// Toolkit already initialized
+		}
 	}
 
 	@Test
