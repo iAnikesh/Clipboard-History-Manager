@@ -111,4 +111,27 @@ class LRUCacheTest {
         assertThrows(IllegalArgumentException.class, () -> new LRUCache<>(0));
         assertThrows(IllegalArgumentException.class, () -> new LRUCache<>(-1));
     }
+
+    @Test
+    void testDeduplication() {
+        cache.put("hash1", "Repeated Text");
+        cache.put("hash1", "Repeated Text");
+        cache.put("hash1", "Repeated Text");
+        
+        assertEquals(1, cache.size(), "Cache size should not grow on duplicate inserts");
+        assertEquals("Repeated Text", cache.get("hash1"));
+        
+        // Ensure adding a new item doesn't interfere
+        cache.put("hash2", "New Text");
+        assertEquals(2, cache.size());
+        assertEquals("New Text", cache.get("hash2"));
+        
+        // Re-adding hash1 should just move it to most recently used
+        cache.put("hash1", "Repeated Text");
+        assertEquals(2, cache.size());
+        
+        List<String> list = cache.getAllMostRecentFirst();
+        assertEquals("Repeated Text", list.get(0));
+        assertEquals("New Text", list.get(1));
+    }
 }

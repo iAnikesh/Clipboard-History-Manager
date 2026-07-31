@@ -31,3 +31,14 @@
 
 ## Day 7 → 
 - Tests for the LRU cache and dedup logic, CI, README documenting the OS support matrix (this is a good place to show you understand the Wayland limitation rather than hide it), jpackage build.
+
+# OS Support Matrix
+
+This application uses native Java AWT bindings for system clipboard and system tray interactions, wrapped in a lightweight JavaFX UI.
+
+| OS | Status | Notes |
+|----|--------|-------|
+| **macOS** (10.15+) | ✅ Supported | Full support for tray icon and clipboard access. |
+| **Windows** (10+) | ✅ Supported | Full support for tray icon and clipboard access. |
+| **Linux (X11)** | ✅ Supported | Requires `xclip` or `xsel` installed for optimal clipboard monitoring. |
+| **Linux (Wayland)** | ⚠️ Limited | **Known Wayland Limitation:** Wayland's strict security model actively prevents background applications from reading the global clipboard unless the application explicitly has focus. Java's AWT `SystemTray` API also lacks native Wayland support (often resulting in missing icons or falling back to a legacy XWayland window). Running the application under XWayland (`GDK_BACKEND=x11`) is required for functional clipboard tracking on Linux. |

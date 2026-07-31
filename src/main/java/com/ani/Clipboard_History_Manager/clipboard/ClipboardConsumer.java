@@ -30,6 +30,15 @@ public class ClipboardConsumer {
         this.executor = Executors.newSingleThreadExecutor(Thread.ofVirtual().factory());
     }
 
+    public interface CacheUpdateListener {
+        void onCacheUpdated();
+    }
+    private final List<CacheUpdateListener> listeners = new java.util.concurrent.CopyOnWriteArrayList<>();
+
+    public void addListener(CacheUpdateListener listener) {
+        listeners.add(listener);
+    }
+
     @PostConstruct
     public void startConsuming() {
         // Load history into cache on startup
@@ -38,6 +47,7 @@ public class ClipboardConsumer {
             cache.put(item.getHash(), item);
         }
         System.out.println("Loaded " + history.size() + " items from database into cache.");
+        notifyListeners();
 
         executor.submit(() -> {
             System.out.println("Clipboard consumer started on virtual thread: " + Thread.currentThread());
@@ -68,12 +78,17 @@ public class ClipboardConsumer {
                     }
                     
                     System.out.println("Consumer processed item. Cache size: " + cache.size() + ", Hash: " + hash);
+                    notifyListeners();
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     break;
                 }
             }
         });
+    }
+
+    private void notifyListeners() {
+        listeners.forEach(CacheUpdateListener::onCacheUpdated);
     }
 
     @PreDestroy
