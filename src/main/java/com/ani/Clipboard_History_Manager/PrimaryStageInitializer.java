@@ -1,8 +1,6 @@
 package com.ani.Clipboard_History_Manager;
 
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;

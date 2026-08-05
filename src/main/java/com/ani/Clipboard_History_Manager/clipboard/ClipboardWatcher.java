@@ -13,7 +13,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 @Component
 public class ClipboardWatcher {
 
-    private final BlockingQueue<ClipboardItem> queue = new LinkedBlockingQueue<>();
+    private final BlockingQueue<ClipboardItem> queue = new LinkedBlockingQueue<>(); // Thread-Safe - Producer-Consumer Problem solution
     private volatile boolean running = true;
     private Thread watcherThread;
 

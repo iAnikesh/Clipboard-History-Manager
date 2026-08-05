@@ -15,13 +15,13 @@ public class JavaFxApplication extends Application {
 
     @Override
     public void init() {
-        ApplicationContextInitializer<GenericApplicationContext> initializer =
-                ac -> {
-                    ac.registerBean(Application.class, () -> JavaFxApplication.this);
-                    ac.registerBean(Application.Parameters.class, this::getParameters);
-                    ac.registerBean(HostServices.class, this::getHostServices);
-                };
-        
+        ApplicationContextInitializer<GenericApplicationContext> initializer = ac -> {
+            ac.registerBean(Application.class, () -> JavaFxApplication.this);
+            ac.registerBean(Application.Parameters.class, this::getParameters);
+            ac.registerBean(HostServices.class, this::getHostServices);
+        };
+        // We tell Spring: "Start up now, but don't try to run a web server
+        // (headless=false)"
         this.context = new SpringApplicationBuilder()
                 .sources(ClipboardHistoryManagerApplication.class)
                 .initializers(initializer)
